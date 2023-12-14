@@ -21,11 +21,13 @@ class AppConstants {
   static const apk = 'apk';
   static const release = '--release';
   static const obfuscate = '--obfuscate';
-  static String splitDebugInfo = '--split-debug-info=${Directory.current.path}/debug_info';
+  static String splitDebugInfo =
+      '--split-debug-info=${Directory.current.path}/debug_info';
   static const spilitPerAbi = '--split-per-abi';
   static const noShrink = '--no-shrink';
   static const pubspecLock = 'pubspec.lock';
   static const appBundle = 'appbundle';
+  static const web = 'web';
 }
 
 class AppCommands {
@@ -34,6 +36,7 @@ class AppCommands {
   static const ipa = 'ipa';
   static const fixPods = 'fixPods';
   static const appBundle = 'appBundle';
+  static const web = 'web';
 }
 
 class ShortHands {
@@ -42,6 +45,7 @@ class ShortHands {
   static const buildIpa = 'i';
   static const fixPods = 'p';
   static const appBundle = 'b';
+  static const web = 'w';
 }
 
 class HelpDescriptions {
@@ -50,4 +54,5 @@ class HelpDescriptions {
   static const buildIpa = 'Run Ipa script';
   static const fixPods = 'Run fix pods script';
   static const appBundle = 'Run app bundle script';
+  static const web = 'Run web build script';
 }

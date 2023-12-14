@@ -4,11 +4,17 @@ import 'package:mus/mus.dart';
 
 void main(List<String> arguments) {
   final ArgParser argParser = ArgParser()
-    ..addFlag(AppCommands.clean, abbr: ShortHands.clean, help: HelpDescriptions.clean)
-    ..addFlag(AppCommands.fixPods, abbr: ShortHands.fixPods, help: HelpDescriptions.fixPods)
-    ..addFlag(AppCommands.ipa, abbr: ShortHands.buildIpa, help: HelpDescriptions.buildIpa)
-    ..addFlag(AppCommands.appBundle, abbr: ShortHands.appBundle, help: HelpDescriptions.appBundle)
-    ..addFlag(AppCommands.apk, abbr: ShortHands.releaseApk, help: HelpDescriptions.releaseApk);
+    ..addFlag(AppCommands.clean,
+        abbr: ShortHands.clean, help: HelpDescriptions.clean)
+    ..addFlag(AppCommands.fixPods,
+        abbr: ShortHands.fixPods, help: HelpDescriptions.fixPods)
+    ..addFlag(AppCommands.ipa,
+        abbr: ShortHands.buildIpa, help: HelpDescriptions.buildIpa)
+    ..addFlag(AppCommands.appBundle,
+        abbr: ShortHands.appBundle, help: HelpDescriptions.appBundle)
+    ..addFlag(AppCommands.web, abbr: ShortHands.web, help: HelpDescriptions.web)
+    ..addFlag(AppCommands.apk,
+        abbr: ShortHands.releaseApk, help: HelpDescriptions.releaseApk);
   if (arguments.isEmpty) {
     printUsage(argParser);
     return;
@@ -30,6 +36,9 @@ void main(List<String> arguments) {
         break;
       case AppCommands.fixPods:
         fixPods();
+        break;
+      case AppCommands.web:
+        buildAppBundle();
         break;
       case AppCommands.appBundle:
         buildAppBundle();
@@ -59,18 +68,46 @@ void clean() {
 
 void buildApk() {
   clean();
-  runCommand(AppConstants.flutter,
-      [AppConstants.build, AppConstants.apk, AppConstants.release, AppConstants.obfuscate, AppConstants.splitDebugInfo, AppConstants.spilitPerAbi, AppConstants.noShrink]);
+  runCommand(AppConstants.flutter, [
+    AppConstants.build,
+    AppConstants.apk,
+    AppConstants.release,
+    AppConstants.obfuscate,
+    AppConstants.splitDebugInfo,
+    AppConstants.spilitPerAbi,
+    AppConstants.noShrink
+  ]);
 }
 
 void buildAppBundle() {
   clean();
-  runCommand(AppConstants.flutter, [AppConstants.build, AppConstants.appBundle, AppConstants.release, AppConstants.obfuscate, AppConstants.splitDebugInfo, AppConstants.noShrink]);
+  runCommand(AppConstants.flutter, [
+    AppConstants.build,
+    AppConstants.appBundle,
+    AppConstants.release,
+    AppConstants.obfuscate,
+    AppConstants.splitDebugInfo,
+    AppConstants.noShrink
+  ]);
+}
+
+void buildWeb() {
+  clean();
+  runCommand(AppConstants.flutter, [
+    AppConstants.build,
+    AppConstants.web,
+    AppConstants.release,
+  ]);
 }
 
 void buildIpa() {
   fixPods();
-  runCommand(AppConstants.flutter, [AppConstants.build, AppCommands.ipa, AppConstants.obfuscate, AppConstants.splitDebugInfo]);
+  runCommand(AppConstants.flutter, [
+    AppConstants.build,
+    AppCommands.ipa,
+    AppConstants.obfuscate,
+    AppConstants.splitDebugInfo
+  ]);
 }
 
 void fixPods() {
@@ -78,8 +115,19 @@ void fixPods() {
   runCommand(AppConstants.rm, [AppConstants.r, AppConstants.iosPodfileLock]);
   runCommand(AppConstants.rm, [AppConstants.r, AppConstants.symLinks]);
   clean();
-  runCommand(AppConstants.sudo, [AppConstants.arch, AppConstants.x8664, AppConstants.gem, AppConstants.install, AppConstants.ffi]);
-  runCommand(AppConstants.arch, [AppConstants.x8664, AppConstants.pod, AppConstants.install, AppConstants.repoUpdate]);
+  runCommand(AppConstants.sudo, [
+    AppConstants.arch,
+    AppConstants.x8664,
+    AppConstants.gem,
+    AppConstants.install,
+    AppConstants.ffi
+  ]);
+  runCommand(AppConstants.arch, [
+    AppConstants.x8664,
+    AppConstants.pod,
+    AppConstants.install,
+    AppConstants.repoUpdate
+  ]);
 }
 
 void runCommand(String executable, List<String> command) {
