@@ -38,7 +38,7 @@ void main(List<String> arguments) {
         fixPods();
         break;
       case AppCommands.web:
-        buildAppBundle();
+        buildWeb();
         break;
       case AppCommands.appBundle:
         buildAppBundle();
