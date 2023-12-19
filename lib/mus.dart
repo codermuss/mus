@@ -1,5 +1,14 @@
 import 'dart:io';
 
+class AppCommands {
+  static const clean = 'clean';
+  static const apk = 'apk';
+  static const ipa = 'ipa';
+  static const fixPods = 'fixPods';
+  static const appBundle = 'appBundle';
+  static const web = 'web';
+}
+
 class AppConstants {
   static const flutter = 'flutter';
   static const pub = 'pub';
@@ -28,24 +37,9 @@ class AppConstants {
   static const pubspecLock = 'pubspec.lock';
   static const appBundle = 'appbundle';
   static const web = 'web';
-}
-
-class AppCommands {
-  static const clean = 'clean';
-  static const apk = 'apk';
-  static const ipa = 'ipa';
-  static const fixPods = 'fixPods';
-  static const appBundle = 'appBundle';
-  static const web = 'web';
-}
-
-class ShortHands {
-  static const clean = 'c';
-  static const releaseApk = 'a';
-  static const buildIpa = 'i';
-  static const fixPods = 'p';
-  static const appBundle = 'b';
-  static const web = 'w';
+  static const cd = 'cd';
+  static const ios = 'ios';
+  static const dot = '..';
 }
 
 class HelpDescriptions {
@@ -55,4 +49,13 @@ class HelpDescriptions {
   static const fixPods = 'Run fix pods script';
   static const appBundle = 'Run app bundle script';
   static const web = 'Run web build script';
+}
+
+class ShortHands {
+  static const clean = 'c';
+  static const releaseApk = 'a';
+  static const buildIpa = 'i';
+  static const fixPods = 'p';
+  static const appBundle = 'b';
+  static const web = 'w';
 }

@@ -1,4 +1,5 @@
 import 'dart:io';
+
 import 'package:args/args.dart';
 import 'package:mus/mus.dart';
 
@@ -52,20 +53,6 @@ void main(List<String> arguments) {
   }
 }
 
-void clean() {
-  /// MARK:  Remove build folder
-  runCommand(AppConstants.rm, [AppConstants.r, AppConstants.build]);
-
-  /// MARK: Remove pubspec lock
-  runCommand(AppConstants.rm, [AppConstants.r, AppConstants.pubspecLock]);
-
-  /// MARK: Run flutter clean
-  runCommand(AppConstants.flutter, [AppCommands.clean]);
-
-  /// MARK: Run flutter pub get
-  runCommand(AppConstants.flutter, [AppConstants.pub, AppConstants.getWord]);
-}
-
 void buildApk() {
   clean();
   runCommand(AppConstants.flutter, [
@@ -91,15 +78,6 @@ void buildAppBundle() {
   ]);
 }
 
-void buildWeb() {
-  clean();
-  runCommand(AppConstants.flutter, [
-    AppConstants.build,
-    AppConstants.web,
-    AppConstants.release,
-  ]);
-}
-
 void buildIpa() {
   fixPods();
   runCommand(AppConstants.flutter, [
@@ -110,11 +88,35 @@ void buildIpa() {
   ]);
 }
 
+void buildWeb() {
+  clean();
+  runCommand(AppConstants.flutter, [
+    AppConstants.build,
+    AppConstants.web,
+    AppConstants.release,
+  ]);
+}
+
+void clean() {
+  /// MARK:  Remove build folder
+  runCommand(AppConstants.rm, [AppConstants.r, AppConstants.build]);
+
+  /// MARK: Remove pubspec lock
+  runCommand(AppConstants.rm, [AppConstants.r, AppConstants.pubspecLock]);
+
+  /// MARK: Run flutter clean
+  runCommand(AppConstants.flutter, [AppCommands.clean]);
+
+  /// MARK: Run flutter pub get
+  runCommand(AppConstants.flutter, [AppConstants.pub, AppConstants.getWord]);
+}
+
 void fixPods() {
   runCommand(AppConstants.rm, [AppConstants.r, AppConstants.iosPods]);
   runCommand(AppConstants.rm, [AppConstants.r, AppConstants.iosPodfileLock]);
   runCommand(AppConstants.rm, [AppConstants.r, AppConstants.symLinks]);
   clean();
+  runCommand(AppConstants.cd, [AppConstants.ios]);
   runCommand(AppConstants.sudo, [
     AppConstants.arch,
     AppConstants.x8664,
@@ -128,6 +130,12 @@ void fixPods() {
     AppConstants.install,
     AppConstants.repoUpdate
   ]);
+  runCommand(AppConstants.cd, [AppConstants.dot]);
+}
+
+void printUsage(ArgParser argParser) {
+  print('Usage: mus.dart [options]');
+  print(argParser.usage);
 }
 
 void runCommand(String executable, List<String> command) {
@@ -146,9 +154,4 @@ void runCommand(String executable, List<String> command) {
   } else {
     print('Command executed successfully: $executable ${command.join(' ')}');
   }
-}
-
-void printUsage(ArgParser argParser) {
-  print('Usage: mus.dart [options]');
-  print(argParser.usage);
 }
