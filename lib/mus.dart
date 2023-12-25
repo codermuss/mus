@@ -7,6 +7,7 @@ class AppCommands {
   static const fixPods = 'fixPods';
   static const appBundle = 'appBundle';
   static const web = 'web';
+  static const runBuildRunner = 'runBuildRunner';
 }
 
 class AppConstants {
@@ -40,6 +41,16 @@ class AppConstants {
   static const cd = 'cd';
   static const ios = 'ios';
   static const dot = '..';
+  static const open = 'open';
+  static const outputs = 'outputs';
+  static const app = 'app';
+  static const bundle = 'bundle';
+  static const releaseFolder = 'release';
+  static const flutterApk = 'flutter-apk';
+  static const dart = 'dart';
+  static const run = 'run';
+  static const buildRunner = 'build_runner';
+  static const deleteConflictingOutputs = 'delete-conflicting-outputs';
 }
 
 class HelpDescriptions {
@@ -49,6 +60,7 @@ class HelpDescriptions {
   static const fixPods = 'Run fix pods script';
   static const appBundle = 'Run app bundle script';
   static const web = 'Run web build script';
+  static const runBuildRunner = 'Run build runner script';
 }
 
 class ShortHands {
@@ -58,4 +70,5 @@ class ShortHands {
   static const fixPods = 'p';
   static const appBundle = 'b';
   static const web = 'w';
+  static const runBuildRunner = 'r';
 }

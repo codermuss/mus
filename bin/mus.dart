@@ -15,7 +15,9 @@ void main(List<String> arguments) {
         abbr: ShortHands.appBundle, help: HelpDescriptions.appBundle)
     ..addFlag(AppCommands.web, abbr: ShortHands.web, help: HelpDescriptions.web)
     ..addFlag(AppCommands.apk,
-        abbr: ShortHands.releaseApk, help: HelpDescriptions.releaseApk);
+        abbr: ShortHands.releaseApk, help: HelpDescriptions.releaseApk)
+    ..addFlag(AppCommands.runBuildRunner,
+        abbr: ShortHands.runBuildRunner, help: HelpDescriptions.runBuildRunner);
   if (arguments.isEmpty) {
     printUsage(argParser);
     return;
@@ -64,6 +66,12 @@ void buildApk() {
     AppConstants.spilitPerAbi,
     AppConstants.noShrink
   ]);
+  runCommand(AppConstants.open, [
+    AppConstants.build,
+    AppConstants.app,
+    AppConstants.outputs,
+    AppConstants.flutterApk
+  ]);
 }
 
 void buildAppBundle() {
@@ -75,6 +83,13 @@ void buildAppBundle() {
     AppConstants.obfuscate,
     AppConstants.splitDebugInfo,
     AppConstants.noShrink
+  ]);
+  runCommand(AppConstants.open, [
+    AppConstants.build,
+    AppConstants.app,
+    AppConstants.outputs,
+    AppConstants.bundle,
+    AppConstants.releaseFolder,
   ]);
 }
 
