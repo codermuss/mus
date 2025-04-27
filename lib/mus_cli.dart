@@ -1,4 +1,8 @@
-import 'commands/build_commands.dart';
+import 'package:mus/commands/build/apk_command.dart';
+import 'package:mus/commands/build/appbundle_command.dart';
+import 'package:mus/commands/build/ipa_command.dart';
+import 'package:mus/commands/build/web_command.dart';
+
 import 'commands/command_registry.dart';
 
 class MusCli {

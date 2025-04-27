@@ -15,6 +15,18 @@ abstract class BaseCommand {
 
   Future<void> execute();
 
+  // Terminal output utilities
+  static final _commandPen = AnsiPen()..cyan();
+  static final _successPen = AnsiPen()..green();
+  static final _errorPen = AnsiPen()..red();
+  static final _infoPen = AnsiPen()..yellow();
+  static final _borderPen = AnsiPen()..blue();
+
+  static const _maxWidth = 80;
+  static const _labelWidth = 15;
+  static const _valueWidth =
+      _maxWidth - _labelWidth - 4; // 4 for padding and borders
+
   List<String> _wrapText(String text, int width) {
     if (text.length <= width) return [text];
 
@@ -37,20 +49,16 @@ abstract class BaseCommand {
 
   String _createTableRow(
       String label, String value, AnsiPen labelPen, AnsiPen valuePen) {
-    final maxWidth = 80;
-    final labelWidth = 15;
-    final valueWidth = maxWidth - labelWidth - 4; // 4 for padding and borders
-
-    final formattedLabel = label.padRight(labelWidth);
-    final wrappedValue = _wrapText(value, valueWidth);
+    final formattedLabel = label.padRight(_labelWidth);
+    final wrappedValue = _wrapText(value, _valueWidth);
 
     final rows = <String>[];
     for (var i = 0; i < wrappedValue.length; i++) {
-      final value = wrappedValue[i].padRight(valueWidth);
+      final value = wrappedValue[i].padRight(_valueWidth);
       if (i == 0) {
         rows.add('│ ${labelPen(formattedLabel)} │ ${valuePen(value)} │');
       } else {
-        rows.add('│ ${' '.padRight(labelWidth)} │ ${valuePen(value)} │');
+        rows.add('│ ${' '.padRight(_labelWidth)} │ ${valuePen(value)} │');
       }
     }
 
@@ -58,19 +66,12 @@ abstract class BaseCommand {
   }
 
   Future<bool> runCommand(String executable, List<String> command) async {
-    final commandPen = AnsiPen()..cyan();
-    final successPen = AnsiPen()..green();
-    final errorPen = AnsiPen()..red();
-    final infoPen = AnsiPen()..yellow();
-    final borderPen = AnsiPen()..blue();
-
     final commandStr = '$executable ${command.join(' ')}';
-    final maxWidth = 80;
-    final horizontalBorder = '─'.padRight(maxWidth, '─');
+    final horizontalBorder = '─'.padRight(_maxWidth, '─');
 
-    print('\n${borderPen('┌$horizontalBorder┐')}');
-    print(_createTableRow('🚀 Command', commandStr, commandPen, commandPen));
-    print(borderPen('├$horizontalBorder┤'));
+    print('\n${_borderPen('┌$horizontalBorder┐')}');
+    print(_createTableRow('🚀 Command', commandStr, _commandPen, _commandPen));
+    print(_borderPen('├$horizontalBorder┤'));
 
     final result = await Process.run(
       executable,
@@ -79,27 +80,27 @@ abstract class BaseCommand {
     );
 
     if (result.exitCode != 0) {
-      print(_createTableRow('❌ Status', 'Failed', errorPen, errorPen));
+      print(_createTableRow('❌ Status', 'Failed', _errorPen, _errorPen));
       print(_createTableRow(
-          '📊 Exit Code', result.exitCode.toString(), infoPen, errorPen));
+          '📊 Exit Code', result.exitCode.toString(), _infoPen, _errorPen));
 
       if (result.stdout.toString().isNotEmpty) {
         print(_createTableRow(
-            '📝 Output', result.stdout.toString().trim(), infoPen, infoPen));
+            '📝 Output', result.stdout.toString().trim(), _infoPen, _infoPen));
       }
       if (result.stderr.toString().isNotEmpty) {
         print(_createTableRow(
-            '⚠️ Error', result.stderr.toString().trim(), infoPen, errorPen));
+            '⚠️ Error', result.stderr.toString().trim(), _infoPen, _errorPen));
       }
     } else {
-      print(_createTableRow('✅ Status', 'Success', successPen, successPen));
+      print(_createTableRow('✅ Status', 'Success', _successPen, _successPen));
       if (result.stdout.toString().isNotEmpty) {
         print(_createTableRow(
-            '📝 Output', result.stdout.toString().trim(), infoPen, infoPen));
+            '📝 Output', result.stdout.toString().trim(), _infoPen, _infoPen));
       }
     }
 
-    print('${borderPen('└$horizontalBorder┘')}\n');
+    print('${_borderPen('└$horizontalBorder┘')}\n');
     return result.exitCode == 0;
   }
 }
