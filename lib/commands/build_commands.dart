@@ -31,8 +31,8 @@ class BuildApkCommand extends BaseCommand {
       AppConfig.noShrink
     ]);
     if (buildSuccess) {
-      final outputDir =
-          '${AppConfig.build}/${AppConfig.app}/${AppConfig.outputs}/${AppConfig.flutterApk}';
+      final outputDir = path.join(Directory.current.path, AppConfig.build,
+          AppConfig.app, AppConfig.outputs, AppConfig.flutterApk);
       await runCommand('mv', [
         path.join(outputDir, 'app-armeabi-v7a-release.apk'),
         path.join(outputDir, outputName)
@@ -86,8 +86,13 @@ class BuildAppBundleCommand extends BaseCommand {
     ]);
 
     if (buildSuccess) {
-      final outputDir =
-          '${AppConfig.build}/${AppConfig.app}/${AppConfig.outputs}/${AppConfig.bundle}/${AppConfig.releaseFolder}';
+      final outputDir = path.join(
+          Directory.current.path,
+          AppConfig.build,
+          AppConfig.app,
+          AppConfig.outputs,
+          AppConfig.bundle,
+          AppConfig.releaseFolder);
       await runCommand('mv', [
         path.join(outputDir, 'app-release.aab'),
         path.join(outputDir, outputName)
