@@ -14,6 +14,7 @@ dev_dependencies:
   test: ^1.21.0
 dependencies:
   args: ^2.4.2
+  ansicolor: ^2.0.1
 
 executables:
   mus:

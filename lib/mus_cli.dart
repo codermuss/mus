@@ -24,11 +24,21 @@ class MusCli {
       return;
     }
 
+    if (arguments.contains('-v') || arguments.contains('--version')) {
+      _registry.printVersion();
+      return;
+    }
+
     try {
       final args = _registry.parser.parse(arguments);
 
       if (args['help']) {
         _registry.printUsage();
+        return;
+      }
+
+      if (args['version']) {
+        _registry.printVersion();
         return;
       }
 
