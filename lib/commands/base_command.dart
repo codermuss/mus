@@ -15,6 +15,26 @@ abstract class BaseCommand {
 
   Future<void> execute();
 
+  List<String> _wrapText(String text, int width) {
+    if (text.length <= width) return [text];
+
+    final words = text.split(' ');
+    final lines = <String>[];
+    var currentLine = '';
+
+    for (var word in words) {
+      if (('$currentLine $word').length <= width) {
+        currentLine += (currentLine.isEmpty ? '' : ' ') + word;
+      } else {
+        if (currentLine.isNotEmpty) lines.add(currentLine);
+        currentLine = word;
+      }
+    }
+    if (currentLine.isNotEmpty) lines.add(currentLine);
+
+    return lines;
+  }
+
   String _createTableRow(
       String label, String value, AnsiPen labelPen, AnsiPen valuePen) {
     final maxWidth = 80;
@@ -22,11 +42,19 @@ abstract class BaseCommand {
     final valueWidth = maxWidth - labelWidth - 4; // 4 for padding and borders
 
     final formattedLabel = label.padRight(labelWidth);
-    final formattedValue = value.length > valueWidth
-        ? '${value.substring(0, valueWidth - 3)}...'
-        : value.padRight(valueWidth);
+    final wrappedValue = _wrapText(value, valueWidth);
 
-    return '│ ${labelPen(formattedLabel)} │ ${valuePen(formattedValue)} │';
+    final rows = <String>[];
+    for (var i = 0; i < wrappedValue.length; i++) {
+      final value = wrappedValue[i].padRight(valueWidth);
+      if (i == 0) {
+        rows.add('│ ${labelPen(formattedLabel)} │ ${valuePen(value)} │');
+      } else {
+        rows.add('│ ${' '.padRight(labelWidth)} │ ${valuePen(value)} │');
+      }
+    }
+
+    return rows.join('\n');
   }
 
   Future<bool> runCommand(String executable, List<String> command) async {
