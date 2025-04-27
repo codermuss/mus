@@ -12,7 +12,7 @@ class BuildApkCommand extends BaseCommand {
   @override
   Future<void> execute() async {
     await runCommand(AppConfig.rm, [AppConfig.r, AppConfig.buildDir]);
-    await runCommand(AppConfig.flutter, [
+    final buildSuccess = await runCommand(AppConfig.flutter, [
       AppConfig.build,
       AppConfig.apk,
       AppConfig.release,
@@ -21,9 +21,11 @@ class BuildApkCommand extends BaseCommand {
       AppConfig.splitPerAbi,
       AppConfig.noShrink
     ]);
-    await runCommand(AppConfig.open, [
-      '${AppConfig.build}/${AppConfig.app}/${AppConfig.outputs}/${AppConfig.flutterApk}'
-    ]);
+    if (buildSuccess) {
+      await runCommand(AppConfig.open, [
+        '${AppConfig.build}/${AppConfig.app}/${AppConfig.outputs}/${AppConfig.flutterApk}'
+      ]);
+    }
   }
 }
 
@@ -38,7 +40,7 @@ class BuildAppBundleCommand extends BaseCommand {
   @override
   Future<void> execute() async {
     await runCommand(AppConfig.rm, [AppConfig.r, AppConfig.buildDir]);
-    await runCommand(AppConfig.flutter, [
+    final buildSuccess = await runCommand(AppConfig.flutter, [
       AppConfig.build,
       AppConfig.appBundle,
       AppConfig.release,
@@ -47,9 +49,11 @@ class BuildAppBundleCommand extends BaseCommand {
       AppConfig.noShrink
     ]);
 
-    await runCommand(AppConfig.open, [
-      '${AppConfig.build}/${AppConfig.app}/${AppConfig.outputs}/${AppConfig.bundle}/${AppConfig.releaseFolder}'
-    ]);
+    if (buildSuccess) {
+      await runCommand(AppConfig.open, [
+        '${AppConfig.build}/${AppConfig.app}/${AppConfig.outputs}/${AppConfig.bundle}/${AppConfig.releaseFolder}'
+      ]);
+    }
   }
 }
 

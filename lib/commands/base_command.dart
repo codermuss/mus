@@ -13,7 +13,7 @@ abstract class BaseCommand {
 
   Future<void> execute();
 
-  Future<void> runCommand(String executable, List<String> command) async {
+  Future<bool> runCommand(String executable, List<String> command) async {
     print('Command executing : $executable ${command.join(' ')}');
     final result = await Process.run(
       executable,
@@ -22,15 +22,15 @@ abstract class BaseCommand {
     );
 
     if (result.exitCode != 0) {
-      throw CommandException(
-        'Error running command: $executable ${command.join(' ')}',
-        result.exitCode,
-        result.stdout.toString(),
-        result.stderr.toString(),
-      );
+      print('Command failed: $executable ${command.join(' ')}');
+      print('Exit code: ${result.exitCode}');
+      print('Output: ${result.stdout}');
+      print('Error: ${result.stderr}');
+      return false;
     }
 
     print('Command executed successfully: $executable ${command.join(' ')}');
+    return true;
   }
 }
 
