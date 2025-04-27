@@ -1,7 +1,3 @@
-import 'dart:io';
-
-import 'package:path/path.dart' as path;
-
 import '../config/app_config.dart';
 import 'base_command.dart';
 
@@ -26,10 +22,7 @@ class BuildApkCommand extends BaseCommand {
       AppConfig.noShrink
     ]);
     await runCommand(AppConfig.open, [
-      AppConfig.build,
-      AppConfig.app,
-      AppConfig.outputs,
-      AppConfig.flutterApk
+      '${AppConfig.build}/${AppConfig.app}/${AppConfig.outputs}/${AppConfig.flutterApk}'
     ]);
   }
 }
@@ -54,14 +47,9 @@ class BuildAppBundleCommand extends BaseCommand {
       AppConfig.noShrink
     ]);
 
-    final bundlePath = path.join(Directory.current.path, 'build', 'app',
-        'outputs', 'bundle', 'release', 'app-release.aab');
-
-    if (!File(bundlePath).existsSync()) {
-      throw Exception('App Bundle file not found at: $bundlePath');
-    }
-
-    await runCommand(AppConfig.open, [bundlePath]);
+    await runCommand(AppConfig.open, [
+      '${AppConfig.build}/${AppConfig.app}/${AppConfig.outputs}/${AppConfig.bundle}/${AppConfig.releaseFolder}'
+    ]);
   }
 }
 
