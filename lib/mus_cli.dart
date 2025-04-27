@@ -1,4 +1,8 @@
-import 'commands/build_commands.dart';
+import 'package:mus/commands/build/apk_command.dart';
+import 'package:mus/commands/build/appbundle_command.dart';
+import 'package:mus/commands/build/ipa_command.dart';
+import 'package:mus/commands/build/web_command.dart';
+
 import 'commands/command_registry.dart';
 
 class MusCli {
@@ -17,13 +21,31 @@ class MusCli {
   }
 
   Future<void> run(List<String> arguments) async {
-    if (arguments.isEmpty) {
+    if (arguments.isEmpty ||
+        arguments.contains('-h') ||
+        arguments.contains('--help')) {
       _registry.printUsage();
+      return;
+    }
+
+    if (arguments.contains('-v') || arguments.contains('--version')) {
+      _registry.printVersion();
       return;
     }
 
     try {
       final args = _registry.parser.parse(arguments);
+
+      if (args['help']) {
+        _registry.printUsage();
+        return;
+      }
+
+      if (args['version']) {
+        _registry.printVersion();
+        return;
+      }
+
       final commandName = args.options.first;
       final command = _registry.getCommand(commandName);
 
