@@ -17,13 +17,21 @@ class MusCli {
   }
 
   Future<void> run(List<String> arguments) async {
-    if (arguments.isEmpty) {
+    if (arguments.isEmpty ||
+        arguments.contains('-h') ||
+        arguments.contains('--help')) {
       _registry.printUsage();
       return;
     }
 
     try {
       final args = _registry.parser.parse(arguments);
+
+      if (args['help']) {
+        _registry.printUsage();
+        return;
+      }
+
       final commandName = args.options.first;
       final command = _registry.getCommand(commandName);
 
