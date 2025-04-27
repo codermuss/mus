@@ -28,7 +28,7 @@ class AppConfig {
   static const String dot = '.';
   static const String sudo = 'sudo';
   static const String arch = 'arch';
-  static const String x8664 = 'x86_64';
+  static const String x8664 = '-x86_64';
   static const String gem = 'gem';
   static const String install = 'install';
   static const String ffi = 'ffi';
