@@ -1,5 +1,7 @@
 import 'dart:io';
 
+import 'package:ansicolor/ansicolor.dart';
+
 abstract class BaseCommand {
   final String name;
   final String description;
@@ -14,7 +16,13 @@ abstract class BaseCommand {
   Future<void> execute();
 
   Future<bool> runCommand(String executable, List<String> command) async {
-    print('Command executing : $executable ${command.join(' ')}');
+    final commandPen = AnsiPen()..cyan();
+    final successPen = AnsiPen()..green();
+    final errorPen = AnsiPen()..red();
+    final infoPen = AnsiPen()..yellow();
+
+    print(
+        '\n${commandPen('🚀 Executing:')} ${commandPen('$executable ${command.join(' ')}')}');
     final result = await Process.run(
       executable,
       command,
@@ -22,14 +30,24 @@ abstract class BaseCommand {
     );
 
     if (result.exitCode != 0) {
-      print('Command failed: $executable ${command.join(' ')}');
-      print('Exit code: ${result.exitCode}');
-      print('Output: ${result.stdout}');
-      print('Error: ${result.stderr}');
+      print(
+          '${errorPen('❌ Failed:')} ${errorPen('$executable ${command.join(' ')}')}');
+      print(
+          '${infoPen('📊 Exit code:')} ${errorPen(result.exitCode.toString())}');
+      if (result.stdout.toString().isNotEmpty) {
+        print('${infoPen('📝 Output:')}\n${result.stdout}');
+      }
+      if (result.stderr.toString().isNotEmpty) {
+        print('${infoPen('⚠️ Error:')}\n${errorPen(result.stderr)}');
+      }
       return false;
     }
 
-    print('Command executed successfully: $executable ${command.join(' ')}');
+    print(
+        '${successPen('✅ Success:')} ${successPen('$executable ${command.join(' ')}')}');
+    if (result.stdout.toString().isNotEmpty) {
+      print('${infoPen('📝 Output:')}\n${result.stdout}');
+    }
     return true;
   }
 }
